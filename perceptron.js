@@ -32,6 +32,7 @@ Perceptron.prototype.train = function(inputs, desired) {
   for (var i = 0; i < this.weights.length; i++) {
     this.weights[i] += this.c * error * inputs[i];
   }
+  return error;
 }
 
 // Guess -1 or 1 based on input values

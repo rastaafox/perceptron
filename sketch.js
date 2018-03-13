@@ -16,7 +16,7 @@ var ptron;
 var count = 0;
 var NbRun = 1;
 //Slowmode value : 0 - 1
-var SlowMode = 1;
+var SlowMode = 0
 
 // Coordinate space
 var xmin = -1;
@@ -56,22 +56,13 @@ function setup() {
 
 function draw() {
 	
-  background(255);
-  // Draw the line
-  strokeWeight(1);
-  stroke(0);
-  var x1 = map(xmin, xmin, xmax, 0, width);
-  var y1 = map(f(xmin), ymin, ymax, height, 0);
-  var x2 = map(xmax, xmin, xmax, 0, width);
-  var y2 = map(f(xmax), ymin, ymax, height, 0);
-  line(x1, y1, x2, y2);
 
 
-
+  var TrainResult;
 
   // Train the Perceptron with one "training" point at a time
    if(SlowMode == 1){
-		ptron.train(training[count].input, training[count].output);
+		TrainResult = ptron.train(training[count].input, training[count].output);
    } else {
 	   for (var i = 0; i < training.length; i++) {
 			ptron.train(training[i].input, training[i].output);
@@ -82,6 +73,17 @@ function draw() {
 
   count = (count + 1) % training.length;
 
+  if (TrainResult !=0) {
+  background(255);
+  // Draw the line
+  strokeWeight(1);
+  stroke(0);
+  var x1 = map(xmin, xmin, xmax, 0, width);
+  var y1 = map(f(xmin), ymin, ymax, height, 0);
+  var x2 = map(xmax, xmin, xmax, 0, width);
+  var y2 = map(f(xmax), ymin, ymax, height, 0);
+  line(x1, y1, x2, y2);
+
   // Set % success
   var GuessOK = 0;
   // Draw all the points based on what the Perceptron would "guess"
@@ -89,13 +91,13 @@ function draw() {
   for (var i = 0; i < training.length; i++) {
     stroke(0);
     strokeWeight(1);
-    fill(0);
+   // fill(0);
     var guess = ptron.feedforward(training[i].input);
     if (guess > 0) noFill();
 
     var x = map(training[i].input[0], xmin, xmax, 0, width);
     var y = map(training[i].input[1], ymin, ymax, height, 0);
-    ellipse(x, y, 16, 16);
+    //ellipse(x, y, 16, 16);
 	if(guess == training[i].output) {
 		GuessOK++;
 		if (guess == 1){
@@ -134,6 +136,9 @@ function draw() {
 	document.getElementById("Percent").value = GuessOK/training.length;
 	document.getElementById("Learning").value = ptron.c;
 	document.getElementById("NbRun").value = NbRun;
+	document.getElementById("W1").value = ptron.weights[0];
+	document.getElementById("W2").value = ptron.weights[1];
+	document.getElementById("W3").value = ptron.weights[2];
 	
   // Draw the line based on the current weights
   // Formula is weights[0]*x + weights[1]*y + weights[2] = 0
@@ -149,5 +154,6 @@ function draw() {
   var x2 = map(x2, xmin, xmax, 0, width);
   var y2 = map(y2, ymin, ymax, height, 0);
   line(x1, y1, x2, y2);
+  }
   NbRun++;
 }
