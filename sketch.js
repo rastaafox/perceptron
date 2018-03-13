@@ -8,7 +8,7 @@
 // Code based on text "Artificial Intelligence", George Luger
 
 // A list of points we will use to "train" the perceptron
-var training = new Array(1000);
+var training = new Array(500);
 // A Perceptron object
 var ptron;
 
