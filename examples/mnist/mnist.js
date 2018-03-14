@@ -1,10 +1,10 @@
 function loadMNIST(callback) {
   let mnist = {};
   let files = {
-    train_images: 'train-images-idx3-ubyte',
-    train_labels: 'train-labels-idx1-ubyte',
-    test_images: 't10k-images-idx3-ubyte',
-    test_labels: 't10k-labels-idx1-ubyte',
+    train_images: 'train-images-idx3-ubyte.data',
+    train_labels: 'train-labels-idx1-ubyte.data',
+    test_images: 't10k-images-idx3-ubyte.data',
+    test_labels: 't10k-labels-idx1-ubyte.data',
   };
   return Promise.all(Object.keys(files).map(async file => {
     mnist[file] = await loadFile(files[file])
