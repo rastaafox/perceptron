@@ -1,7 +1,8 @@
 <html>
 <head>
 	<script language="javascript" type="text/javascript" src="p5.js"></script>
-	<script language="javascript" type="text/javascript" src="perceptron.js"></script>
+	<script language="javascript" type="text/javascript" src="lib/nn.js"></script>
+	<script language="javascript" type="text/javascript" src="lib/matrix.js"></script>
 	<script language="javascript" type="text/javascript" src="sketch.js"></script>
 </head>
 
@@ -20,20 +21,9 @@
 		<span>Nombre de run: </span>
 		<input id='NbRun' value="0">
 	</label>
-	<br />
-		<label>
-		<span>W1: </span>
-		<input id='W1' value="0">
-	</label>
-	<br />
-		<label>
-		<span>W2: </span>
-		<input id='W2' value="0">
-	</label>
-	<br />
-		<label>
-		<span>W3: </span>
-		<input id='W3' value="0">
+	<label>
+		<span>F(x): </span>
+		<input id='Fx' value="0">
 	</label>
 	<br />
 </body>
