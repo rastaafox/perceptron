@@ -1,7 +1,7 @@
 function loadMNIST(callback) {
   let mnist = {};
   let files = {
-    train_images: 'train-images-idx3-ubyte.data',
+    train_images: 'Toy-Neural-Network-JS/examples/mnist/train-images-idx3-ubyte',
     train_labels: 'train-labels-idx1-ubyte.data',
     test_images: 't10k-images-idx3-ubyte.data',
     test_labels: 't10k-labels-idx1-ubyte.data',
