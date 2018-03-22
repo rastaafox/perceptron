@@ -290,6 +290,13 @@
       agentView = !agentView;
     }
 
+    function ResetScore() {
+      for(var i=0; i<w.agents.length; i++) {
+        w.agents[i].apples = 0;
+		w.agents[i].poison = 0;
+      }
+    }
+
     var lastKey = null;
     document.onkeydown = function(e) {
       var event = window.event ? window.event : e;
@@ -442,6 +449,7 @@ spec.num_hidden_units = 100 // number of neurons in hidden layer
 <button class="btn btn-success" onclick="gonormal()" style="width:150px;height:50px;margin-bottom:5px;">Go normal</button>
 <button class="btn btn-success" onclick="goslow()" style="width:150px;height:50px;margin-bottom:5px;">Go slow</button>
 <button class="btn btn-primary" onclick="saveAgent()" style="width:150px;height:50px;margin-bottom:5px;">Save Agent</button>
+<button class="btn btn-success" onclick="ResetScore()" style="width:150px;height:50px;margin-bottom:5px;">Reset Score</button>
 <button class="btn btn-danger" onclick="toggleAgentView()" style="width:150px;height:50px;margin-bottom:5px;">Toggle Agent View</button>
 <button class="btn btn-danger" onclick="enableHuman()" style="width:150px;height:50px;margin-bottom:5px;">Start playing (use arrow keys)</button>
 
