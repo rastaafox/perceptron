@@ -396,7 +396,7 @@
     function updateStats() {
       var stats = "<ul>";
       for(var i=0; i<w.agents.length; i++) {
-        stats += "<li>Player " + (i+1) + ": Precent : " + Number.parseFloat((w.agents[i].apples / (w.agents[i].apples + w.agents[i].poison+ 1))*100).toFixed(2) + "% "+ w.agents[i].apples + " apples, " + w.agents[i].poison + " poison</li>";
+        stats += "<li>Player " + (i+1) + ": Precent : " + Number.parseFloat((w.agents[i].apples / (w.agents[i].apples + w.agents[i].poison+ 1))*100).toFixed(2) + "% "+ w.agents[i].apples + " apples, " + w.agents[i].poison + " poison Nb Item : " + w.items.length + " </li>";
       }
       stats += "</ul>";
       $("#apples_and_poison").html(stats);

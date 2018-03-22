@@ -88,7 +88,7 @@ var World = function() {
   this.H = canvas.height;
   
   this.clock = 0;
-  
+  this.ItemNB  = 100;
   // set up walls in the world
   this.walls = []; 
   var pad = 0;
@@ -102,7 +102,7 @@ var World = function() {
   
   // set up food and poison
   this.items = []
-  for(var k=0;k<50;k++) {
+  for(var k=0;k<this.ItemNB;k++) {
     var x = randf(20, this.W-20);
     var y = randf(20, this.H-20);
     var t = randi(1, 3); // food or poison (1 and 2)
@@ -294,26 +294,28 @@ World.prototype = {
       }
       this.items = nt; // swap
     }
-    if(this.items.length < 50 && this.clock % 10 === 0 && randf(0,1)<0.25) {
-      var newitx = randf(20, this.W-20);
-      var newity = randf(20, this.H-20);
-	  var iter = 0;
-		for(var i=0,n=this.items.length;i<n;i++) {
-			if (this.items[i].type === 1) // food
-				iter++;
-			else	//poison
-				iter--;
+	for (var i = this.items.length; i < this.ItemNB;i++)
+	{
+		if(this.items.length < this.ItemNB && this.clock % 10 === 0 && randf(0,1)<0.25) {
+		  var newitx = randf(20, this.W-20);
+		  var newity = randf(20, this.H-20);
+		  var iter = 0;
+			for(var i=0,n=this.items.length;i<n;i++) {
+				if (this.items[i].type === 1) // food
+					iter++;
+				else	//poison
+					iter--;
+			}
+	//		console.log(iter);
+		  var newitt = randi(1, 3); // food or poison (1 and 2)
+			if (iter > 0)
+				newitt = 2;
+			else 
+				newitt = 1;
+		  var newit = new Item(newitx, newity, newitt);
+		  this.items.push(newit);
 		}
-//		console.log(iter);
-      var newitt = randi(1, 3); // food or poison (1 and 2)
-		if (iter > 0)
-			newitt = 2;
-		else 
-			newitt = 1;
-      var newit = new Item(newitx, newity, newitt);
-      this.items.push(newit);
     }
-    
     // agents are given the opportunity to learn based on feedback of their action on environment
     for(var i=0,n=this.agents.length;i<n;i++) {
       this.agents[i].backward();
