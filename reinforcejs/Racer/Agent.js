@@ -25,6 +25,14 @@ Agent.prototype = {
   getMaxNumActions: function() {
     return this.actions.length;
   },
+  updateNNShow: function(input_array) {
+  var stats = "<ul>";
+  for(var i=0; i<input_array.length; i++) {
+	stats += "<li>NNInput "+ i + " : " + input_array[i] + " </li>";
+  }
+  stats += "</ul>";
+  $("#NNInput").html(stats);
+},
   forward: function() {
     var input_array = new Array(this.num_states);
 	var X = position;
@@ -34,9 +42,8 @@ Agent.prototype = {
 	var D = 1; //normalized Max
 	  
 	
-	var B = maxSpeed; //Max speed
 	input_array[0] = playerX;
-	input_array[1] = (a.brain.env.speed-A)/(B-A) * (D-C) + C;
+	input_array[1] = a.brain.env.speed;
 	var B = trackLength;
 	input_array[2] = (position-A)/(B-A) * (D-C) + C;
 	var A = -6; //min speed
@@ -71,10 +78,12 @@ Agent.prototype = {
 		  input_array[4 + i*2 + 1] = 0;
 	  }
     this.action = this.brain.act(input_array);
+	this.updateNNShow(input_array);
     //var action = this.actions[actionix];
     // demultiplex into behavior variables
     //this.action = action;
   },
+
   backward: function() {
 var reward = this.digestion_signal;
     var reward = this.digestion_signal;
