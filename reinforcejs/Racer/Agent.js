@@ -51,6 +51,8 @@ Agent.prototype = {
 	var C = -1; //normalized Min
 	var playerSegment = findSegment(position+playerZ);
 	input_array[3] = (playerSegment.curve-A)/(B-A) * (D-C) + C;
+	var playerSegment = findSegment(position+playerZ+7500);
+	input_array[4] = (playerSegment.curve-A)/(B-A) * (D-C) + C;
 	var C = 0; //normalized Min
 	var A = 0; //min speed
 	
@@ -65,17 +67,17 @@ Agent.prototype = {
 			if (cars[n].z - position > 0 && cars[n].z - position < 30000 && i < 10)
 			{
 				var B = trackLength;
-				input_array[4 + i*2]		= (cars[n].z-A)/(B-A) * (D-C) + C;
+				input_array[5 + i*2]		= (cars[n].z-A)/(B-A) * (D-C) + C;
 				var B = maxSpeed;
-				input_array[4 + i*2 + 1]	= cars[n].offset;
+				input_array[5 + i*2 + 1]	= cars[n].offset;
 				i++;
 			}
 		  }
 	 }
 
 	  for (n = i;i < 10;i++){
-		  input_array[4 + i*2] = 0;
-		  input_array[4 + i*2 + 1] = 0;
+		  input_array[5 + i*2] = 0;
+		  input_array[5 + i*2 + 1] = 0;
 	  }
     this.action = this.brain.act(input_array);
 	this.updateNNShow(input_array);
