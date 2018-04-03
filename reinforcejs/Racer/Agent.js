@@ -1,5 +1,5 @@
 var Agent = function() {
-	this.num_states = 10*2 + 3;
+	this.num_states = 10*2 + 4;
 	//this.num_states = 3;
 	this.last_reward = 0;
 	this.speed = 0;
@@ -33,44 +33,43 @@ Agent.prototype = {
 	var C = 0; //normalized Min
 	var D = 1; //normalized Max
 	  
-	/*  for(n = 0 ; n < 10 ; n++) {
-		var B = trackLength;
-		input_array[n*2]		= (cars[n].z-A)/(B-A) * (D-C) + C;
-		var B = maxSpeed;
-		input_array[n*2 + 1]	= cars[n].offset;
-	  }
-	var B = maxSpeed; //Max speed
-	input_array[10*2+1] = playerX;
-	input_array[10*2+2] = (a.brain.env.speed-A)/(B-A) * (D-C) + C;
-	var B = trackLength;
-	input_array[10*2+3] = (position-A)/(B-A) * (D-C) + C;*/
 	
 	var B = maxSpeed; //Max speed
 	input_array[0] = playerX;
 	input_array[1] = (a.brain.env.speed-A)/(B-A) * (D-C) + C;
 	var B = trackLength;
 	input_array[2] = (position-A)/(B-A) * (D-C) + C;
+	var A = -6; //min speed
+	var B = 6; //Max speed
+	var C = -1; //normalized Min
+	var playerSegment = findSegment(position+playerZ);
+	input_array[3] = (playerSegment.curve-A)/(B-A) * (D-C) + C;
+	var C = 0; //normalized Min
+	var A = 0; //min speed
+	
 	var WorkingCars = [];
 	for(n = 0 ; n < totalCars ; n++) {
 		WorkingCars[n] = cars[n];
 	  }
 	 var i = 0;
-	for(n = 0 ; n < totalCars ; n++) {
-		if (cars[n].z - position > 0 && cars[n].z - position < 30000 && i < 10)
-		{
-			var B = trackLength;
-			input_array[3 + i*2]		= (cars[n].z-A)/(B-A) * (D-C) + C;
-			var B = maxSpeed;
-			input_array[3 + i*2 + 1]	= cars[n].offset;
-			i++;
-		}
-	  }
-	 // console.log(i);
+	 if (CarsEnable == 1)
+	 {
+		for(n = 0 ; n < totalCars ; n++) {
+			if (cars[n].z - position > 0 && cars[n].z - position < 30000 && i < 10)
+			{
+				var B = trackLength;
+				input_array[4 + i*2]		= (cars[n].z-A)/(B-A) * (D-C) + C;
+				var B = maxSpeed;
+				input_array[4 + i*2 + 1]	= cars[n].offset;
+				i++;
+			}
+		  }
+	 }
+
 	  for (n = i;i < 10;i++){
-		  input_array[3 + i*2] = -1;
-		  input_array[3 + i*2 + 1] = -1;
+		  input_array[4 + i*2] = 0;
+		  input_array[4 + i*2 + 1] = 0;
 	  }
-	  
     this.action = this.brain.act(input_array);
     //var action = this.actions[actionix];
     // demultiplex into behavior variables
