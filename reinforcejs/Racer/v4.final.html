@@ -77,6 +77,10 @@
       <th><label for="CarsEnable">Cars? (<span id="currentCarsEnable"></span>) :</label></th>
       <td><input id="CarsEnable" type='range' min='0' max='1' title="CarsEnable : 0 NON - 1 Oui"></td>
     </tr>
+	<tr>
+      <th><label for="Epsilon">Epsilon (<span id="currentEpsilon"></span>) :</label></th>
+      <td><input id="Epsilon" type='range' min='0' max='100' title="epsilon : integer (0-100)"></td>
+    </tr>
   </table>
 
   <div id='instructions'>
@@ -195,7 +199,8 @@
 	var SpriteStat	   = 0;						  // Sprite are active or not. 0 NON - 1 OUI
 	var NNActive	   = 1;						  // NeronalNetwork is active or not. 0 NON - 1 OUI
 	var CarsEnable	   = 1;						  // CarsEnable is active or not. 0 NON - 1 OUI
-    var position       = 0;                       // current camera Z position (add playerZ to get player's absolute Z position)
+	var Epsilon 	   = 20;						  // CarsEnable is active or not. 0 NON - 1 OUI
+	var position       = 0;                       // current camera Z position (add playerZ to get player's absolute Z position)
     var speed          = 0;                       // current speed
     var lastSpeed      = 0;                       // last speed
     var maxSpeed       = segmentLength/step;      // top speed (ensure we can't move more than 1 segment in a single frame to make collision detection easier)
@@ -248,7 +253,9 @@
       var speedPercent  = speed/maxSpeed;
       var dx            = dt * 2 * speedPercent; // at top speed, should be able to cross from left to right (-1 to 1) in 1 second
       var startPosition = position;
-
+	  var hit			= 0;
+	  spec.epsilon = Epsilon/100;
+	  
       updateCars(dt, playerSegment, playerW);
 
       position = Util.increase(position, dt * speed, trackLength);
@@ -278,6 +285,7 @@
 			  sprite  = playerSegment.sprites[n];
 			  spriteW = sprite.source.w * SPRITES.SCALE;
 			  if (Util.overlap(playerX, playerW, sprite.offset + spriteW/2 * (sprite.offset > 0 ? 1 : -1), spriteW)) {
+			    hit		 = 1;
 				speed = maxSpeed/5;
 				position = Util.increase(playerSegment.p1.world.z, -playerZ, trackLength); // stop in front of sprite (at front of segment)
 				break;
@@ -292,6 +300,7 @@
 			carW = car.sprite.w * SPRITES.SCALE;
 			if (speed > car.speed) {
 			  if (Util.overlap(playerX, playerW, car.offset, carW, 0.8)) {
+			    hit		 = 1;
 				speed    = car.speed * (car.speed/speed);
 				position = Util.increase(car.z, -playerZ, trackLength);
 				break;
@@ -353,7 +362,8 @@
 		if ((playerX > 1) && EasyMode == 1)
 			playerX = 1;
 		}	  
-	
+	  if (hit == 1)
+		a.brain.env.digestion_signal = -1;
 	  lastSpeed = a.brain.env.speed;
 	  updateHud('learn',            a.brain.env.digestion_signal.toFixed(2)); 
 	  updateHud('current_pos',      (position/trackLength).toFixed(2)); 
@@ -841,6 +851,7 @@
       SpriteStat             = Util.toInt(options.SpriteStat,     SpriteStat);
       NNActive               = Util.toInt(options.NNActive,       NNActive);
       CarsEnable             = Util.toInt(options.CarsEnable,     CarsEnable);
+	  Epsilon			     = Util.toInt(options.Epsilon,     	  Epsilon);
       fieldOfView            = Util.toInt(options.fieldOfView,    fieldOfView);
       segmentLength          = Util.toInt(options.segmentLength,  segmentLength);
       rumbleLength           = Util.toInt(options.rumbleLength,   rumbleLength);
@@ -879,6 +890,7 @@
     Dom.on('SpriteStat',     'change', function(ev) { Dom.blur(ev); reset({ SpriteStat:    Util.limit(Util.toInt(ev.target.value), Util.toInt(ev.target.getAttribute('min')), Util.toInt(ev.target.getAttribute('max'))) }); });
     Dom.on('NNActive',       'change', function(ev) { Dom.blur(ev); reset({ NNActive:      Util.limit(Util.toInt(ev.target.value), Util.toInt(ev.target.getAttribute('min')), Util.toInt(ev.target.getAttribute('max'))) }); });
     Dom.on('CarsEnable',     'change', function(ev) { Dom.blur(ev); reset({ CarsEnable:    Util.limit(Util.toInt(ev.target.value), Util.toInt(ev.target.getAttribute('min')), Util.toInt(ev.target.getAttribute('max'))) }); });
+    Dom.on('Epsilon',        'change', function(ev) { Dom.blur(ev); reset({ Epsilon:       Util.limit(Util.toInt(ev.target.value), Util.toInt(ev.target.getAttribute('min')), Util.toInt(ev.target.getAttribute('max'))) }); });
 
     function refreshTweakUI() {
       Dom.get('lanes').selectedIndex = lanes-1;
@@ -891,6 +903,8 @@
       Dom.get('currentSpriteStat').innerHTML     = Dom.get('SpriteStat').value     = SpriteStat;
       Dom.get('currentNNActive').innerHTML       = Dom.get('NNActive').value       = NNActive;
       Dom.get('currentCarsEnable').innerHTML     = Dom.get('CarsEnable').value     = CarsEnable;
+      Dom.get('currentEpsilon').innerHTML        = Dom.get('Epsilon').value        = Epsilon;
+	  
     }
 
     //=========================================================================
